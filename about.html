@@ -1,0 +1,90 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — Tattva Taxonomy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background-color: #f7f9f7; color: #1a1a1a; }
+        .font-serif { font-family: 'Fraunces', serif; }
+        .bg-canopy { background: radial-gradient(120% 80% at 50% -10%, rgba(46, 125, 50, 0.15) 0%, transparent 55%), linear-gradient(180deg, rgba(238, 247, 242, 0.8) 0%, #f7f9f7 70%); }
+    </style>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#2e7d32', secondary: '#e8f5e9', accent: '#f57c00', border: '#e0e0e0', muted: '#666666' } } } }
+    </script>
+</head>
+<body class="flex min-h-screen flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-border bg-white/70 backdrop-blur-md">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+            <a href="index.html" class="flex items-center gap-2">
+                <svg viewBox="0 0 64 64" class="h-8 w-8 text-primary" fill="none"><path d="M52 8C26 8 10 24 10 48c0 4 1 8 2 11 1-14 8-26 22-32-9 8-13 18-14 30 8-1 15-4 21-9 10-9 14-22 13-40h-2Z" fill="currentColor"></path></svg>
+                <span class="font-serif text-lg font-medium tracking-tight">Tattva Taxonomy</span>
+            </a>
+            <nav class="flex items-center gap-4 text-sm font-medium">
+                <a href="index.html" class="text-muted hover:text-black transition">Search</a>
+                <a href="about.html" class="text-primary">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1">
+        <section class="relative overflow-hidden bg-canopy py-20">
+            <div class="relative mx-auto max-w-3xl px-4 text-center">
+                <h1 class="font-serif text-4xl font-medium tracking-tight md:text-5xl">Understanding taxonomy</h1>
+                <p class="mt-4 text-lg text-muted text-balance">How life is classified, why scientific names matter, and how to read the results from this tool.</p>
+            </div>
+        </section>
+
+        <section class="mx-auto max-w-3xl px-4 py-16 space-y-12">
+            <div>
+                <h2 class="text-2xl font-semibold mb-4">What is taxonomy?</h2>
+                <p class="leading-relaxed text-muted">Taxonomy is the science of naming, describing, and classifying living things. Every known organism is placed into a hierarchy of categories, from the broadest group — <strong>Kingdom</strong> — down to the most specific, <strong>Species</strong>. This hierarchy lets us see how plants and animals are related and communicate about them unambiguously across languages.</p>
+            </div>
+
+            <div class="rounded-3xl border border-border bg-white p-6 shadow-sm">
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-muted mb-4">The classification hierarchy</h3>
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="rounded-full border border-border bg-gray-50 px-3 py-1 text-sm">Kingdom</span> <span class="text-muted">→</span>
+                    <span class="rounded-full border border-border bg-gray-50 px-3 py-1 text-sm">Phylum</span> <span class="text-muted">→</span>
+                    <span class="rounded-full border border-border bg-gray-50 px-3 py-1 text-sm">Class</span> <span class="text-muted">→</span>
+                    <span class="rounded-full border border-border bg-gray-50 px-3 py-1 text-sm">Order</span> <span class="text-muted">→</span>
+                    <span class="rounded-full border border-border bg-gray-50 px-3 py-1 text-sm">Family</span> <span class="text-muted">→</span>
+                    <span class="rounded-full border border-border bg-gray-50 px-3 py-1 text-sm">Genus</span> <span class="text-muted">→</span>
+                    <span class="rounded-full border border-primary bg-secondary text-primary font-medium px-3 py-1 text-sm">Species</span>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-semibold mb-4">Common vs. scientific names</h2>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="rounded-2xl border border-border bg-white p-5 shadow-sm">
+                        <p class="font-semibold text-accent">Common Name</p>
+                        <p class="mt-2 text-sm text-muted">Varies by region and language — "mango," "aam," "manga." Easy to say, but one plant can have dozens of common names and one name can refer to several plants.</p>
+                    </div>
+                    <div class="rounded-2xl border border-border bg-white p-5 shadow-sm">
+                        <p class="font-semibold text-primary">Scientific Name</p>
+                        <p class="mt-2 text-sm text-muted">A unique two-part Latin name — <em class="text-black font-serif">Mangifera indica</em> — used worldwide. The first part is the genus, the second the species. Always written in italics.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="index.html" class="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white transition hover:brightness-110 shadow-md hover:shadow-lg">Start Searching</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-border bg-white mt-auto">
+        <div class="mx-auto max-w-6xl px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <svg viewBox="0 0 64 64" class="h-6 w-6 text-primary/70" fill="none"><path d="M52 8C26 8 10 24 10 48c0 4 1 8 2 11 1-14 8-26 22-32-9 8-13 18-14 30 8-1 15-4 21-9 10-9 14-22 13-40h-2Z" fill="currentColor"></path></svg>
+                <span class="text-sm text-muted">Tattva Identifier</span>
+            </div>
+            <p class="text-xs text-muted/70">Data: iNaturalist API · Verify with a specialist for critical use.</p>
+        </div>
+    </footer>
+</body>
+</html>
