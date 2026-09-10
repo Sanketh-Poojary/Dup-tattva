@@ -3,200 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tattva - Scientific Name Explorer</title>
-    
+    <title>Tattva — Discover Plant Classification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
     <style>
-        /* Reset and Base Styles */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #eef7f2; /* Light nature green background */
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start; /* Changed to flex-start so it can scroll if results are long */
-            min-height: 100vh; 
-            color: #333;
-            padding: 2rem 1rem;
+        body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background-color: #f7f9f7; color: #1a1a1a; }
+        .font-serif { font-family: 'Fraunces', serif; }
+        .bg-canopy { background: radial-gradient(120% 80% at 50% -10%, rgba(46, 125, 50, 0.15) 0%, transparent 55%), linear-gradient(180deg, rgba(238, 247, 242, 0.8) 0%, #f7f9f7 70%); }
+        .bg-glass { backdrop-filter: blur(12px); background-color: rgba(255, 255, 255, 0.7); }
+        @keyframes leaf-float { 
+            0%, 100% { transform: translateY(0px) rotate(0deg); } 
+            50% { transform: translateY(-8px) rotate(2deg); } 
         }
-        
-        /* The Main Card */
-        .tattva-card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            border-top: 6px solid #2e7d32; /* Forest green accent */
-        }
-        
-        h1 { color: #2e7d32; margin-bottom: 0.5rem; font-size: 2.2rem; }
-        p.subtitle { color: #666; margin-bottom: 2rem; font-size: 0.95rem; }
-        
-        /* Inputs and Buttons */
-        input {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-            background-color: white;
-        }
-        input:focus { border-color: #2e7d32; }
-        
-        button {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #2e7d32;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover { background-color: #1b5e20; }
-        
-        /* Results Box States */
-        #result-box {
-            margin-top: 1.5rem;
-            padding: 1.2rem;
-            border-radius: 8px;
-            display: none; 
-            text-align: left;
-        }
-        
-        .success-box { background-color: #f9fbf9; border: 1px solid #c5e1a5; padding: 1rem; border-radius: 8px; }
-        .error { background-color: #ffebee; border: 1px solid #ffcdd2; color: #c62828; text-align: center; padding: 1rem; border-radius: 8px;}
-        
-        /* Typography for Results */
-        .result-label { font-size: 0.75rem; color: #777; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
-        .result-value { font-size: 1.1rem; margin-bottom: 5px; color: #222; text-transform: capitalize; }
-        .sci-name { font-style: italic; font-weight: bold; color: #2e7d32; font-size: 1.3rem; text-transform: none; }
-        
-        /* Multiple Results Styling */
-        .result-item {
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .result-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-            margin-bottom: 0;
-        }
-        
-        /* Rank Badge */
-        .match-rank {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: #2e7d32; /* Green for alternative matches */
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .match-rank.top-match { background-color: #f57c00; } /* Orange for the #1 match */
-
-        /* Responsive Organism Image */
-        .organism-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover; /* Keeps image proportions clean without stretching */
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-        }
+        .animate-leaf-float { animation: 6s ease-in-out infinite leaf-float; }
+        .delay-1500 { animation-delay: 1.5s; }
+        .result-card { animation: 0.5s cubic-bezier(0.22, 1, 0.36, 1) grow-in forwards; }
+        @keyframes grow-in { 0% { opacity: 0; transform: translateY(10px) scale(0.98); } 100% { opacity: 1; transform: translateY(0px) scale(1); } }
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#2e7d32', secondary: '#e8f5e9', accent: '#f57c00', border: '#e0e0e0', muted: '#666666' }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="flex min-h-screen flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-border bg-white/70 backdrop-blur-md">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+            <a href="index.html" class="flex items-center gap-2">
+                <svg viewBox="0 0 64 64" class="h-8 w-8 text-primary" fill="none"><path d="M52 8C26 8 10 24 10 48c0 4 1 8 2 11 1-14 8-26 22-32-9 8-13 18-14 30 8-1 15-4 21-9 10-9 14-22 13-40h-2Z" fill="currentColor" opacity="0.92"></path></svg>
+                <span class="font-serif text-lg font-medium tracking-tight">Tattva Taxonomy</span>
+            </a>
+            <nav class="flex items-center gap-4 text-sm font-medium">
+                <a href="index.html" class="text-primary">Search</a>
+                <a href="about.html" class="text-muted hover:text-black transition">About</a>
+            </nav>
+        </div>
+    </header>
 
-    <div class="tattva-card">
-        <h1>Tattva</h1>
-        <p class="subtitle">Discover the scientific names of nature.</p>
-        
-        <input type="text" id="searchInput" placeholder="e.g., Mango, Tiger, Sunflower..." onkeydown="if(event.key === 'Enter'){ findName(); }">
-        
-        <button onclick="findName()">Search Organism</button>
+    <main class="flex-1">
+        <!-- Hero & Search Section -->
+        <section class="relative overflow-hidden bg-canopy">
+            <!-- Decorative Leaves -->
+            <svg viewBox="0 0 64 64" class="pointer-events-none absolute -right-16 -top-10 h-72 w-72 text-primary/10 animate-leaf-float" fill="none"><path d="M52 8C26 8 10 24 10 48c0 4 1 8 2 11 1-14 8-26 22-32-9 8-13 18-14 30 8-1 15-4 21-9 10-9 14-22 13-40h-2Z" fill="currentColor"></path></svg>
+            <svg viewBox="0 0 64 64" class="pointer-events-none absolute -left-24 bottom-0 h-48 w-48 rotate-180 text-accent/10 animate-leaf-float delay-1500" fill="none"><path d="M52 8C26 8 10 24 10 48c0 4 1 8 2 11 1-14 8-26 22-32-9 8-13 18-14 30 8-1 15-4 21-9 10-9 14-22 13-40h-2Z" fill="currentColor"></path></svg>
+            
+            <div class="relative mx-auto max-w-3xl px-4 pb-12 pt-24 text-center md:pt-32">
+                <span class="inline-flex items-center gap-2 rounded-full border border-border bg-white/50 px-3 py-1 text-xs font-medium bg-glass text-primary">
+                    Botanical & Zoological taxonomy lookup
+                </span>
+                <h1 class="mt-6 font-serif text-5xl leading-tight tracking-tight text-balance md:text-6xl">Discover Nature's Tattva</h1>
+                <p class="mx-auto mt-5 max-w-xl text-lg text-muted text-balance">Enter an organism's name to find its scientific classification — from kingdom down to species.</p>
+                
+                <div class="mx-auto mt-8 max-w-2xl">
+                    <div class="relative">
+                        <input id="searchInput" placeholder="e.g., Mango, Tiger, Sunflower..." class="w-full rounded-full border-2 border-border bg-white h-14 text-lg pl-6 pr-32 font-medium shadow-lg outline-none transition focus:border-primary" type="text" onkeydown="if(event.key === 'Enter'){ findName(); }">
+                        <button onclick="findName()" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-primary font-semibold text-white transition hover:brightness-110 active:scale-95 px-6 py-2.5 text-base">Search</button>
+                    </div>
+                    <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+                        <span class="text-xs uppercase tracking-wider text-muted">Try:</span>
+                        <button onclick="setAndSearch('Neem')" class="rounded-full border border-border bg-secondary/50 px-3 py-1 text-sm transition hover:border-primary hover:text-primary">Neem</button>
+                        <button onclick="setAndSearch('Sunflower')" class="rounded-full border border-border bg-secondary/50 px-3 py-1 text-sm transition hover:border-primary hover:text-primary">Sunflower</button>
+                        <button onclick="setAndSearch('Panthera tigris')" class="rounded-full border border-border bg-secondary/50 px-3 py-1 text-sm transition hover:border-primary hover:text-primary">Tiger</button>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <div id="result-box"></div>
-    </div>
+        <!-- Results Section -->
+        <section class="mx-auto max-w-4xl px-4 pb-16 pt-8">
+            <div id="loading-box" class="hidden text-center text-primary font-medium my-8">Searching nature's database...</div>
+            <div id="error-box" class="hidden text-center text-red-600 bg-red-50 border border-red-200 rounded-xl p-4 my-8"></div>
+            <div id="result-box" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 hidden"></div>
+        </section>
+    </main>
+
+    <footer class="border-t border-border bg-white mt-auto">
+        <div class="mx-auto max-w-6xl px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <svg viewBox="0 0 64 64" class="h-6 w-6 text-primary/70" fill="none"><path d="M52 8C26 8 10 24 10 48c0 4 1 8 2 11 1-14 8-26 22-32-9 8-13 18-14 30 8-1 15-4 21-9 10-9 14-22 13-40h-2Z" fill="currentColor"></path></svg>
+                <span class="text-sm text-muted">Tattva Identifier</span>
+            </div>
+            <p class="text-xs text-muted/70">Data: iNaturalist API · Verify with a specialist for critical use.</p>
+        </div>
+    </footer>
 
     <script>
+        function setAndSearch(term) {
+            document.getElementById('searchInput').value = term;
+            findName();
+        }
+
         async function findName() {
             const query = document.getElementById('searchInput').value.trim();
             const resultBox = document.getElementById('result-box');
+            const loadingBox = document.getElementById('loading-box');
+            const errorBox = document.getElementById('error-box');
 
-            // Handle empty search
+            resultBox.innerHTML = '';
+            resultBox.classList.add('hidden');
+            errorBox.classList.add('hidden');
+
             if (!query) {
-                resultBox.style.display = 'block';
-                resultBox.className = 'error';
-                resultBox.innerHTML = "Please enter a name before searching.";
+                errorBox.innerHTML = "Please enter a name before searching.";
+                errorBox.classList.remove('hidden');
                 return;
             }
 
-            // Show loading state
-            resultBox.style.display = 'block';
-            resultBox.className = 'success-box';
-            resultBox.innerHTML = "Searching nature's database...";
+            loadingBox.classList.remove('hidden');
 
             try {
-                // The /autocomplete endpoint prioritizes exact and most popular matches first
-                let apiUrl = `https://api.inaturalist.org/v1/taxa/autocomplete?q=${encodeURIComponent(query)}&per_page=5`;
-                
-                const response = await fetch(apiUrl);
+                const response = await fetch(`https://api.inaturalist.org/v1/taxa/autocomplete?q=${encodeURIComponent(query)}&per_page=6`);
                 const data = await response.json();
+                loadingBox.classList.add('hidden');
 
-                // If nothing is found
                 if (!data.results || data.results.length === 0) {
-                    resultBox.className = 'error';
-                    resultBox.innerHTML = `No scientific name found for "<strong>${query}</strong>".`;
+                    errorBox.innerHTML = `No scientific name found for "<strong>${query}</strong>".`;
+                    errorBox.classList.remove('hidden');
                 } else {
                     let htmlContent = '';
-                    
-                    // Loop through all results and create a list
                     data.results.forEach((organism, index) => {
-                        // Extract image safely
-                        const imageUrl = organism.default_photo ? organism.default_photo.medium_url : '';
-                        const imageHtml = imageUrl ? `<img src="${imageUrl}" alt="${organism.name}" class="organism-img">` : '';
-                        
-                        // Add a special badge for the first/best match
+                        const imageUrl = organism.default_photo ? organism.default_photo.medium_url : 'https://placehold.co/400x300/e8f5e9/2e7d32?text=No+Image';
                         const isTopMatch = index === 0;
-                        const badgeClass = isTopMatch ? 'match-rank top-match' : 'match-rank';
-                        const badgeText = isTopMatch ? 'Closest Match' : `Result #${index + 1}`;
+                        const badgeClass = isTopMatch ? 'bg-accent' : 'bg-primary';
+                        const badgeText = isTopMatch ? 'Closest Match' : `Rank #${index + 1}`;
 
                         htmlContent += `
-                            <div class="result-item">
-                                <div class="${badgeClass}">${badgeText}</div>
-                                ${imageHtml}
-                                <div class="result-label">Common Name</div>
-                                <div class="result-value">${organism.preferred_common_name || query}</div>
-                                
-                                <div class="result-label">Scientific Name</div>
-                                <div class="result-value sci-name">${organism.name}</div>
-                                
-                                <div class="result-label">Taxonomic Rank</div>
-                                <div class="result-value">${organism.rank || 'Unknown'}</div>
+                            <div class="result-card relative flex flex-col rounded-2xl border border-border bg-white overflow-hidden shadow-sm hover:shadow-md transition">
+                                <div class="absolute top-3 right-3 ${badgeClass} text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide z-10">${badgeText}</div>
+                                <img src="${imageUrl}" alt="${organism.name}" class="w-full h-48 object-cover border-b border-border">
+                                <div class="p-5 flex-1 flex flex-col">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-1">Common Name</p>
+                                    <h3 class="text-xl font-bold text-black capitalize mb-4">${organism.preferred_common_name || query}</h3>
+                                    
+                                    <div class="mt-auto space-y-3">
+                                        <div>
+                                            <p class="text-xs uppercase tracking-wider text-muted">Scientific Name</p>
+                                            <p class="font-serif italic text-lg text-primary">${organism.name}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs uppercase tracking-wider text-muted">Taxonomic Rank</p>
+                                            <p class="text-sm font-medium bg-secondary text-primary inline-block px-2 py-0.5 rounded capitalize">${organism.rank || 'Unknown'}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         `;
                     });
-
-                    // Render final HTML
-                    resultBox.className = 'success-box';
                     resultBox.innerHTML = htmlContent;
+                    resultBox.classList.remove('hidden');
                 }
             } catch (error) {
-                resultBox.className = 'error';
-                resultBox.innerHTML = "A network error occurred. Please check your internet connection.";
+                loadingBox.classList.add('hidden');
+                errorBox.innerHTML = "A network error occurred. Please check your internet connection.";
+                errorBox.classList.remove('hidden');
             }
         }
     </script>
